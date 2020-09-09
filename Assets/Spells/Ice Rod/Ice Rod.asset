@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd1b983a11504a041be439bcf5849174, type: 3}
+  m_Name: Ice Rod
+  m_EditorClassIdentifier: 
+  spellName: Ice Rod
+  castTime: 0.2
+  projectile: {fileID: 3284133322897512616, guid: 5ff498cf19afc7846ad7bb17461ebead,
+    type: 3}
