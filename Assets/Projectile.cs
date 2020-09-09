@@ -16,9 +16,4 @@ public class Projectile : MonoBehaviour
     {
         transform.position = (Vector2)transform.position + velocity * direction * Time.deltaTime;
     }
-
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        Destroy(gameObject);
-    }
 }

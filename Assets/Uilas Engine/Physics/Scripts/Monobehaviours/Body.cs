@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
 public class Body : MonoBehaviour
@@ -210,9 +211,14 @@ public class Body : MonoBehaviour
     {
         Vector2 _startingPoint;
         Vector2 _spreadDirection;
+
+        float _padding = 0.003f;
+        Bounds _bounds = boxCollider2D.bounds;
+        _bounds.size -= new Vector3(_padding * 2, _padding * 2, 0f);
+
         float _size;
         bool _collided = false;
-        float _minDistance = _distance;
+        float _minDistance = _distance + _padding;
 
         // Setting the spread direction of the rays
         _spreadDirection = new Vector2(-_direction.y, -_direction.x);   // Rotating the direction 90 degree counter-clockwise
@@ -220,25 +226,28 @@ public class Body : MonoBehaviour
         // Setting the starting point
         if (_direction == Vector2.right || _direction == Vector2.up)
         {
-            _startingPoint = boxCollider2D.bounds.max;                  // Start on the upper right corner of the colider 
+            _startingPoint = _bounds.max ;                  // Start on the upper right corner of the colider 
         }
         else
         {
-            _startingPoint = boxCollider2D.bounds.min;                  // Start on the lower left corner of the colider 
+            _startingPoint = _bounds.min;                  // Start on the lower left corner of the colider 
         }
 
         // Setting the size of the area covered by the rays
         if (_direction == Vector2.right || _direction == Vector2.left)
         {
-            _size = boxCollider2D.size.y;                               // Horizontal rays spread across the height
+            _size = _bounds.size.y;                               // Horizontal rays spread across the height
         }
         else
         {
-            _size = boxCollider2D.size.x;                               // Vertical rays spread across the width
+            _size = _bounds.size.x;                               // Vertical rays spread across the width
         }
 
         // Setting the spacing between the rays
         float _spacing = _size / (rayCount - 1);
+
+        // Disabling the collider. It prevents the raycast from hitting itself
+        boxCollider2D.enabled = false;
 
         // Creating the rays
         for (int i = 0; i < rayCount; i++)
@@ -247,23 +256,26 @@ public class Body : MonoBehaviour
             Vector2 _relativePosition = _startingPoint + _spreadDirection * i * _spacing;
 
             // Just for debug
-            Debug.DrawLine(_relativePosition, _relativePosition + _direction * (_distance + skinWidth), Color.white);
+            Debug.DrawLine(_relativePosition, _relativePosition + _direction * (_distance + skinWidth + _padding), Color.white);
 
             // Checking for collision from the current ray
-            RaycastHit2D _aux = Physics2D.Raycast(_relativePosition, _direction, _distance + skinWidth, contactLayers);
+            RaycastHit2D _aux = Physics2D.Raycast(_relativePosition, _direction, _distance + skinWidth + _padding, contactLayers);
 
             if (_aux && !_aux.collider.gameObject.Equals(gameObject))
             {
                 bool _ignoreSemiCollision = _aux.collider.gameObject.layer == 11 && (_direction.y >= 0 || ignoreSemiCollision);
 
-                if (!_ignoreSemiCollision && _aux.distance - skinWidth < _minDistance)
+                if (!_ignoreSemiCollision && _aux.distance - skinWidth + _padding < _minDistance)
                 {
-                    _minDistance = _aux.distance - skinWidth;
+                    _minDistance = _aux.distance - skinWidth + _padding;
                     _hit = _aux;
                     _collided = true;
                 }
             }
         }
+
+        // Enabling the collider
+        boxCollider2D.enabled = true;
 
         return _collided;
     }
