@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public const float destroyDelay = 2f;
+
     public float velocity = 5f;
     public Vector2 direction;
 

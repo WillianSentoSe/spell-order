@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 
-public class SidescrollerPlayer : Player
+public class SidescrollerPlayer : PlayerBase
 {
     #region Properties
 
@@ -34,7 +34,6 @@ public class SidescrollerPlayer : Player
     private bool pushingObject;
     private bool playingAnimation;
     private Coroutine waitingForGround;
-    private SpellCast spellCast;
 
     // References
     public static SidescrollerActions actions;
@@ -54,8 +53,6 @@ public class SidescrollerPlayer : Player
 
         jumpForce = Mathf.Sqrt(jumpHeight * -Physics2D.gravity.y * 2);
         body.beforeMove += PushObjects;
-
-        spellCast = GetComponent<SpellCast>();
     }
 
     public virtual void Update()
@@ -159,7 +156,7 @@ public class SidescrollerPlayer : Player
 
     protected virtual void OnPrimaryItemPerformed(InputAction.CallbackContext _context)
     {
-        spellCast?.CastSpell();
+
     }
 
     #endregion

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Body))]
-public abstract class Player : MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour
 {
     #region Properties
 
     // Static Properties
-    public static Player main;
+    public static PlayerBase main;
 
     // Public Properties
     [Header("Generic Properties")]

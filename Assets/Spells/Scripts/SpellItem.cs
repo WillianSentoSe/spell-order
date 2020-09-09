@@ -8,7 +8,7 @@ public class SpellItem : MonoBehaviour, IPickable
 
     public void OnPickup()
     {
-        Player.main.GetComponent<SpellCast>().AddSpell(spell);
+        PlayerBase.main.GetComponent<SpellCast>().AddSpell(spell);
         Destroy(gameObject);
     }
 }
