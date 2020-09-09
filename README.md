@@ -1,5 +1,5 @@
 # Bem vindo(a) à Spell Order
-Spell Order (nome provisório) é um jogo de quebra-cabeças desenvolvido por estudantes de Ciência da Computação na Universidade Federal Rural do Rio de Janeiro. Fique à vontade para baixar o código do jogo ou acompanhar seu desenvolvimento. Tenha em mente que o projeto encontra-se nas fases iniciais e, portanto, coisas irão quebrar.
+Spell Order (nome provisório) é um jogo de quebra-cabeças desenvolvido por estudantes de Ciência da Computação na Universidade Federal Rural do Rio de Janeiro. Fique à vontade para baixar o código do jogo ou acompanhar seu progresso. Tenha em mente que o projeto encontra-se nas fases iniciais e, portanto, coisas irão quebrar.
 
 ## Notas de atualização
 
