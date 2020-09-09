@@ -3,11 +3,19 @@ Spell Order (nome provisório) é um jogo de quebra-cabeças desenvolvido por es
 
 ## Notas de atualização
 
-- 09/09/2020
+![](https://i.ibb.co/JCXJFPW/Print-01.png)
 
+- 09/09/2020
+  
   * :sparkles: Adicionada movimentação básica do jogador
   * :sparkles: Adicionado sistema de Spells
   * :sparkles: Adicionado _Cetro de Gelo_
 
 ## Obtendo o código
-Para obter o código do jogo digete o comando no terminal **'git clone https://github.com/WillianSentoSe/spell-order'**. Depois, adicione a pasta do projeto ao Unity.
+Para obter o código do jogo digete o comando no terminal: 
+
+``` 
+git clone https://github.com/WillianSentoSe/spell-order
+```
+
+Em seguida, basta adicionar a pasta do projeto ao Unity.
