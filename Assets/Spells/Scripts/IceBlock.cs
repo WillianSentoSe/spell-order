@@ -16,6 +16,7 @@ public class IceBlock : MonoBehaviour
     // Public properties
     public float maxAirTime = 4f;
     public Animator animator;
+    public GameObject startParticlePrefab;
 
     // Private properties
     private float airTime;
@@ -34,6 +35,10 @@ public class IceBlock : MonoBehaviour
         // Starting timer
         airTime = maxAirTime;
 
+        // Creating start particles
+        Instantiate(startParticlePrefab, transform.position, Quaternion.identity);
+
+        // Checking for collision
         CheckForCollision();
     }
 
