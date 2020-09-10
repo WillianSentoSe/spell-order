@@ -90,6 +90,8 @@ public class SidescrollerPlayer : PlayerBase
         actions.Gameplay.Down.started += OnDownStart;
 
         actions.Gameplay.PrimaryItem.performed += OnPrimaryItemPerformed;
+
+        actions.Gameplay.Restart.performed += OnRestartPerformed;
     }
 
     protected void DisableActions()
@@ -155,6 +157,11 @@ public class SidescrollerPlayer : PlayerBase
     }
 
     protected virtual void OnPrimaryItemPerformed(InputAction.CallbackContext _context)
+    {
+
+    }
+
+    protected virtual void OnRestartPerformed(InputAction.CallbackContext _context)
     {
 
     }

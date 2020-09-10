@@ -49,6 +49,14 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""345716e7-61ec-4ceb-b07e-ed179b871ba7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -194,6 +202,17 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
                     ""action"": ""PrimaryItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b47a341b-37e4-4095-ae6a-79a9246b4597"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -212,6 +231,7 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Down = m_Gameplay.FindAction("Down", throwIfNotFound: true);
         m_Gameplay_PrimaryItem = m_Gameplay.FindAction("PrimaryItem", throwIfNotFound: true);
+        m_Gameplay_Restart = m_Gameplay.FindAction("Restart", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -265,6 +285,7 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Down;
     private readonly InputAction m_Gameplay_PrimaryItem;
+    private readonly InputAction m_Gameplay_Restart;
     public struct GameplayActions
     {
         private @SidescrollerActions m_Wrapper;
@@ -273,6 +294,7 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Down => m_Wrapper.m_Gameplay_Down;
         public InputAction @PrimaryItem => m_Wrapper.m_Gameplay_PrimaryItem;
+        public InputAction @Restart => m_Wrapper.m_Gameplay_Restart;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -294,6 +316,9 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
                 @PrimaryItem.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimaryItem;
                 @PrimaryItem.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimaryItem;
                 @PrimaryItem.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimaryItem;
+                @Restart.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRestart;
+                @Restart.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRestart;
+                @Restart.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRestart;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -310,6 +335,9 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
                 @PrimaryItem.started += instance.OnPrimaryItem;
                 @PrimaryItem.performed += instance.OnPrimaryItem;
                 @PrimaryItem.canceled += instance.OnPrimaryItem;
+                @Restart.started += instance.OnRestart;
+                @Restart.performed += instance.OnRestart;
+                @Restart.canceled += instance.OnRestart;
             }
         }
     }
@@ -329,5 +357,6 @@ public class @SidescrollerActions : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnDown(InputAction.CallbackContext context);
         void OnPrimaryItem(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
 }

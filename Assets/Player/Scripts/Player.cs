@@ -23,4 +23,9 @@ public class Player : SidescrollerPlayer
 
         spellCast?.CastSpell();
     }
+
+    protected override void OnRestartPerformed(InputAction.CallbackContext _context)
+    {
+        GameManager.main.RestartGame();
+    }
 }
