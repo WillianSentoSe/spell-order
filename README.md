@@ -12,7 +12,7 @@ Spell Order (nome provisório) é um jogo de quebra-cabeças desenvolvido por es
   * :sparkles: Adicionado _Cetro de Gelo_
 
 ## Obtendo o código
-Para obter o código do jogo digete o comando no terminal: 
+Para obter o código do jogo digite o comando no terminal: 
 
 ``` 
 git clone https://github.com/WillianSentoSe/spell-order
