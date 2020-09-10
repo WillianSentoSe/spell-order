@@ -2,6 +2,7 @@
 
 public abstract class Spell : ScriptableObject
 {
+    public Sprite rodSprite;
     public string spellName;
     public float castTime = 0.2f;
 
