@@ -23,7 +23,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     // References
     protected Animator animator;
-    protected SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     protected Body body;
 
     #endregion
