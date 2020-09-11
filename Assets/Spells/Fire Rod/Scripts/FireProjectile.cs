@@ -8,6 +8,9 @@ public class FireProjectile : Projectile
 	{
 		IceBlock _iceBlock = _collider.GetComponent<IceBlock>();
 
+		ShakeEffect _camera = Camera.main.GetComponent<ShakeEffect>();
+		_camera.Shake(0.05f, 0.2f);
+
 		if (_iceBlock)
 		{
 			Destroy(_iceBlock.gameObject);

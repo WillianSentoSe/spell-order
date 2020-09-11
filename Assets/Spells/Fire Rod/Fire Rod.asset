@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd1b983a11504a041be439bcf5849174, type: 3}
   m_Name: Fire Rod
   m_EditorClassIdentifier: 
+  rodSprite: {fileID: 8328985129120836745, guid: 71442a885b3b156459354a51536f9290,
+    type: 3}
   spellName: Fire Rod
   castTime: 0.2
   projectile: {fileID: 7620468418769533558, guid: a472e516c83db9f48a09c03c0b611022,

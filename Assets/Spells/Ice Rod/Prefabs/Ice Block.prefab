@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7824937598339540912}
   - component: {fileID: 3209199030886337462}
   - component: {fileID: 8782473064948496890}
+  - component: {fileID: 7352364296143691879}
   m_Layer: 0
   m_Name: Ice Block
   m_TagString: Untagged
@@ -118,6 +119,19 @@ MonoBehaviour:
   animator: {fileID: 4797896910531829659}
   startParticlePrefab: {fileID: 4606954553924556380, guid: 0101d37c7178dd1459efa1ab4fe43aa5,
     type: 3}
+--- !u!114 &7352364296143691879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429560779257837141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da036be28bc5fd498d85f6cf2afaf1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2065817004633809562}
 --- !u!1 &3127823263837715994
 GameObject:
   m_ObjectHideFlags: 0

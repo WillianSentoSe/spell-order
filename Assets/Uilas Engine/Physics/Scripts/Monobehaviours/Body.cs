@@ -147,7 +147,8 @@ public class Body : MonoBehaviour
     /// </summary>
     /// <param name="_distance"></param>
     /// <param name="_vertical"></param>
-    protected void SimpleMove(float _distance, bool _vertical = false) {
+    protected void SimpleMove(float _distance, bool _vertical = false)
+    {
         // Setting the direction of the movement
         Vector2 _direction = _vertical? Vector2.up : Vector2.right;
         _direction = _direction * Mathf.Sign(_distance);

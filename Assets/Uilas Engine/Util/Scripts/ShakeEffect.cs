@@ -9,9 +9,11 @@ public class ShakeEffect : MonoBehaviour
     public Transform target;
 
     protected float strenght;
+    protected float duration;
     protected float time;
-    protected Vector2 startPosition;
+    protected Vector3 startPosition;
     protected bool isShaking;
+    protected bool decayOverTime;
 
     #endregion
 
@@ -32,10 +34,22 @@ public class ShakeEffect : MonoBehaviour
     {
         if (isShaking)
         {
-            float _x = Random.Range(-strenght, strenght);
-            float _y = Random.Range(-strenght, strenght);
+            if (time > 0)
+            {
+                time -= Time.deltaTime;
 
-            target.position = startPosition + new Vector2(_x, _y);
+                float _delta = time / duration;
+                float _maxDistance = decayOverTime ? strenght * _delta : strenght;
+
+                float _x = Random.Range(-_maxDistance, _maxDistance);
+                float _y = Random.Range(-_maxDistance, _maxDistance);
+
+                target.position = startPosition + new Vector3(_x, _y, startPosition.z);
+            }
+            else
+            {
+                Stop();
+            }
         }
     }
 
@@ -43,16 +57,23 @@ public class ShakeEffect : MonoBehaviour
 
     #region Public Methods
 
-    public void Shake(float _strenght, float _duration)
+    public void Shake(float _strenght, float _duration, bool _decayOverTime = true)
     {
-        strenght = _strenght;
-        time = _duration;
+        if (isShaking) Stop();
 
+        strenght = _strenght;
+        duration = _duration;
+        decayOverTime = _decayOverTime;
+
+        startPosition = target.transform.position;
+        time = duration;
         isShaking = true;
     }
 
     public void Stop()
     {
+        target.position = startPosition;
+
         isShaking = false;
     }
 

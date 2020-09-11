@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 
     public const float destroyDelay = 2f;
     public float velocity = 5f;
+    public GameObject hitEffectParticle;
     public SpriteRenderer spriteRenderer;
 
     [HideInInspector] public Vector2 direction;
@@ -53,6 +54,9 @@ public class Projectile : MonoBehaviour
 
         // Stopping particle emitions in children
         Util.DisableChildrenParticles(transform);
+
+        // Creating the hit effect
+        if (hitEffectParticle) Instantiate(hitEffectParticle, transform.position, Quaternion.identity);
 
         // Destroying the object
         Destroy(gameObject, destroyDelay);

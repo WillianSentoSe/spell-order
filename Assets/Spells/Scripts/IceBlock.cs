@@ -12,6 +12,7 @@ public class IceBlock : MonoBehaviour
     private const float gravityMultiplier = 0.75f;
     private const float instableTime = 1f;
     private const float skinWidth = 0.05f;
+    private const float shakeStrenght = 0.0312f;
 
     // Public properties
     public float maxAirTime = 4f;
@@ -21,6 +22,7 @@ public class IceBlock : MonoBehaviour
     // Private properties
     private float airTime;
     private Body body;
+    private ShakeEffect shakeEffect;
 
     #endregion
 
@@ -31,6 +33,8 @@ public class IceBlock : MonoBehaviour
         // Setting references
         body = GetComponent<Body>();
         body.GravityMultiplier = 0f;
+
+        shakeEffect = GetComponent<ShakeEffect>();
 
         // Starting timer
         airTime = maxAirTime;
@@ -50,11 +54,12 @@ public class IceBlock : MonoBehaviour
             {
                 airTime -= Time.deltaTime;
 
-                if (airTime <= instableTime) animator.Play("Instable");
+                if (!shakeEffect.IsShaking && airTime <= instableTime)
+                    shakeEffect.Shake(shakeStrenght, instableTime, false);
             }
             else
             {
-                animator.Play("Estable");
+                if (shakeEffect.IsShaking) shakeEffect.Stop();
                 body.GravityMultiplier = gravityMultiplier;
             }
         }

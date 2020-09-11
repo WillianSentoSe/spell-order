@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 940165003
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -7393300400691556889, guid: e137c823ee6db554b916ff9c4df3a510,
     type: 3}
@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: 7
+  hitEffectParticle: {fileID: 0}
   spriteRenderer: {fileID: 3209779924616309716}
   direction: {x: 0, y: 0}
   iceBlock: {fileID: 429560779257837141, guid: 314e67dd9e0619644b55e3081f51a4c7, type: 3}
@@ -4897,9 +4898,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 940165003
+  m_SortingLayer: 1
+  m_SortingOrder: -1
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
