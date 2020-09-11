@@ -3,13 +3,21 @@ Spell Order (nome provisório) é um jogo de quebra-cabeças desenvolvido por es
 
 ## Notas de atualização
 
-![](https://i.ibb.co/JCXJFPW/Print-01.png)
+- 10/09/2020
+
+  * :sparkles: Adicionado botão _Reiniciar_
+  * :sparkles: Adicionado _Cetro de Fogo_
+  * :art: Melhorias visuais menores
+
+![](https://i.ibb.co/XSKmQ9k/Print-02.png)
 
 - 09/09/2020
   
   * :sparkles: Adicionada movimentação básica do jogador
   * :sparkles: Adicionado sistema de Spells
   * :sparkles: Adicionado _Cetro de Gelo_
+  
+![](https://i.ibb.co/JCXJFPW/Print-01.png)
 
 ## Obtendo o código
 Para obter o código do jogo digite o comando no terminal: 
