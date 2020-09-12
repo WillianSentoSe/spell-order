@@ -50,7 +50,7 @@
 
                 fixed4 shadCol =  (1 - shad) * _ShadowColor;
 
-                return (shad.w * col) + (((_ShadowColor * _ShadowColor.w) + (col * (1 - _ShadowColor.w))) * (1 - shad.w));
+                return (shad * col * 1.3) + (((_ShadowColor * _ShadowColor.w) + (col * (1 - _ShadowColor.w))) * (1 - shad.w));
             }
             ENDCG
         }
