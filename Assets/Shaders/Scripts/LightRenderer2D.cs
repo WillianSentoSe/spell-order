@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LightRenderer2D : MonoBehaviour
 {
@@ -8,6 +6,7 @@ public class LightRenderer2D : MonoBehaviour
     public GameObject shadowRendererCameraPrefab;
 
     public Color shadowColor;
+
     public Vector2 shadowResolution = new Vector2(400, 400);
 
     private GameObject shadowRendererCamera;
@@ -32,7 +31,7 @@ public class LightRenderer2D : MonoBehaviour
     private void SetupRenderTexture()
     {
         shadowRender = new RenderTexture((int) shadowResolution.x, (int) shadowResolution.y, 0);
-        shadowRender.filterMode = FilterMode.Point;
+        shadowRender.filterMode = FilterMode.Bilinear;
     }
 
     private void InstantiateShadowRendererCamera()
