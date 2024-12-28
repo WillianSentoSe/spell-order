@@ -1,4 +1,4 @@
 ﻿public interface IPickable
 {
-    void OnPickup();
+    void OnPickup(SpellInventory inventory);
 }

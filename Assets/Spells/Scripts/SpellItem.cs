@@ -6,9 +6,9 @@ public class SpellItem : MonoBehaviour, IPickable
 {
     public Spell spell;
 
-    public void OnPickup()
+    public void OnPickup(SpellInventory inventory)
     {
-        PlayerBase.main.GetComponent<SpellCast>().AddSpell(spell);
+        GameManager.main.Player.Inventory.AddSpell(spell);
         Destroy(gameObject);
     }
 }

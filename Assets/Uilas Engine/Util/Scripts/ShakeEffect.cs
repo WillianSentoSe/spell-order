@@ -44,7 +44,7 @@ public class ShakeEffect : MonoBehaviour
                 float _x = Random.Range(-_maxDistance, _maxDistance);
                 float _y = Random.Range(-_maxDistance, _maxDistance);
 
-                target.position = startPosition + new Vector3(_x, _y, startPosition.z);
+                target.localPosition = startPosition + new Vector3(_x, _y, startPosition.z);
             }
             else
             {
@@ -65,14 +65,14 @@ public class ShakeEffect : MonoBehaviour
         duration = _duration;
         decayOverTime = _decayOverTime;
 
-        startPosition = target.transform.position;
+        startPosition = target.transform.localPosition;
         time = duration;
         isShaking = true;
     }
 
     public void Stop()
     {
-        target.position = startPosition;
+        target.localPosition = startPosition;
 
         isShaking = false;
     }

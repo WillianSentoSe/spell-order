@@ -12,12 +12,16 @@ public class GameManager : MonoBehaviour
     public Player playerPrefab;
 
     protected Level currentLevel;
+    protected Player player;
+    protected GameActionsManager actionManager;
 
     #endregion
 
     #region Getters and Setters
 
     public Level CurrentLevel { get { return currentLevel; } }
+    public GameActionsManager Actions { get { return actionManager; } }
+    public Player Player { get { return GetPlayer(); } }
 
     #endregion
 
@@ -27,6 +31,16 @@ public class GameManager : MonoBehaviour
     {
         if (main == null) main = this;
         else if (main != this) Destroy(gameObject);
+
+        actionManager = new GameActionsManager();
+    }
+    protected void OnEnable()
+    {
+    }
+
+    public void Start()
+    {
+        // Player.Actions.OnDeath += RestartGame;
     }
 
     #endregion
@@ -49,6 +63,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Time.timeScale = 1f;
         string _scene = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(_scene);
     }
@@ -56,7 +71,13 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
 
-    } 
+    }
+
+    public Player GetPlayer()
+    {
+        if (player == null) player = GameObject.FindObjectOfType<Player>();
+        return player;
+    }
 
     #endregion
 }

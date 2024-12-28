@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(BoxCollider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class Body : MonoBehaviour
 {
     #region Properties
 
     // Constants
-    private const int rayCount = 5;
-    private const float minGroundDistance = 0.1f;
+    private const int rayCount = 3;
+    private const float minGroundDistance = 0.01f;
     private const float skinWidth = 0.003f;
     private const float minDistance = 0.001f;
     private const float minSlopeAngle = 45;
@@ -21,6 +21,7 @@ public class Body : MonoBehaviour
     public float groundOvertime;
     public bool pushable;
     public LayerMask contactLayers;
+    public LayerMask pushableLayers;
     [HideInInspector] public bool ignoreSemiCollision;
     public event System.Action<Vector2> beforeMove;
     public event System.Action<Vector2> afterMove;
@@ -29,6 +30,7 @@ public class Body : MonoBehaviour
     protected Vector2 velocity;
     protected bool grounded = false;
     protected float gravityMultiplier = 1f;
+    protected bool affectedByGravity = true;
     protected bool skipGroundCheck = false;
     protected Vector2 contactNormal = Vector2.up;
 
@@ -50,6 +52,11 @@ public class Body : MonoBehaviour
     public Vector2 Foot { get { return (Vector2)transform.position - new Vector2(0f, footDistance); } }
     public Vector2 Normal { get { return contactNormal; } }
 
+    public Bounds GetBounds(float _padding = skinWidth)
+    {
+        return new Bounds((Vector2)transform.position + boxCollider2D.offset, new Vector2(boxCollider2D.size.x - _padding, boxCollider2D.size.y - _padding));
+    }
+
     #endregion
 
     #region Execution
@@ -62,11 +69,16 @@ public class Body : MonoBehaviour
 
     public void Update()
     {
-        ApplyGravity();
         CheckGround();
-        Move(velocity * Time.deltaTime);
+    }
 
-        Debug.DrawRay(Foot, contactNormal, Color.yellow);
+    public void FixedUpdate()
+    {
+        ApplyGravity();
+        //CheckGround();
+        Move(velocity * Time.fixedDeltaTime);
+
+        // Debug.DrawRay(Foot, contactNormal, Color.yellow);
     }
 
     #endregion
@@ -96,7 +108,7 @@ public class Body : MonoBehaviour
 
         if (grounded)
         {
-            rb2d.position += Vector2.down * _groundDistance;
+            transform.position = (Vector2) transform.position + Vector2.down * _groundDistance;
             velocity = new Vector2(velocity.x, 0);
             groundedTimeLeft = groundOvertime;
         }
@@ -107,9 +119,9 @@ public class Body : MonoBehaviour
     /// </summary>
     private void ApplyGravity()
     {
-        if (!grounded)
+        if (affectedByGravity && !grounded)
         {
-            velocity += Physics2D.gravity * gravityMultiplier * Time.deltaTime;
+            velocity += Physics2D.gravity * gravityMultiplier * Time.fixedDeltaTime;
         }
     }
 
@@ -150,31 +162,34 @@ public class Body : MonoBehaviour
     protected void SimpleMove(float _distance, bool _vertical = false)
     {
         // Setting the direction of the movement
-        Vector2 _direction = _vertical? Vector2.up : Vector2.right;
-        _direction = _direction * Mathf.Sign(_distance);
+        Vector2 _direction = (_vertical? Vector2.up : Vector2.right) * Mathf.Sign(_distance);
         _distance = Mathf.Abs(_distance);
 
         // Before movement callback
         beforeMove?.Invoke(_direction * _distance);
 
         // Return if the movement is too small
-        if (_distance < minDistance)
-            return;
+        if (_distance < minDistance) return;
 
         // Checking for collision
         bool _collided = CheckDistance(_direction, ref _distance);
 
         if (_vertical && _collided && _direction.y > 0)
         {
-            Velocity = new Vector2(Velocity.x, 0f);
+            ResetGravity();
         }
 
         // Applying movement
         Vector2 _finalVelocity = _direction * _distance;
-        rb2d.position += _finalVelocity;
+        transform.position = (Vector2)transform.position + _finalVelocity;
 
         // After movement callback
         afterMove?.Invoke(_finalVelocity);
+    }
+
+    public void ResetGravity()
+    {
+        Velocity = new Vector2(Velocity.x, 0f);
     }
 
     #endregion
@@ -189,17 +204,17 @@ public class Body : MonoBehaviour
     /// <returns>True if there are any collision and False otherwise</returns>
     public bool CheckDistance(Vector2 _direction, ref float _distance)
     {
-        RaycastHit2D _hit = new RaycastHit2D();
+        RaycastHit2D? _hit = MultiCast(_direction, _distance, contactLayers);
 
-        if (GetCollisor(_direction, _distance, ref _hit))
+        if (_hit.HasValue)
         {
-            _distance = Mathf.Min(_distance, _hit.distance - skinWidth);
+            _distance = Mathf.Min(_distance, _hit.Value.distance - skinWidth);
 
-            float _angle = Vector2.Angle(_hit.normal, Vector2.up);
+            float _angle = Vector2.Angle(_hit.Value.normal, Vector2.up);
             if (Mathf.Abs(_angle) <= minSlopeAngle)
             {
-                contactNormal = _hit.normal;
-                contactPoint = _hit.point;
+                contactNormal = _hit.Value.normal;
+                contactPoint = _hit.Value.point;
             }
 
             return true;
@@ -208,77 +223,122 @@ public class Body : MonoBehaviour
         return false;
     }
 
-    public bool GetCollisor(Vector2 _direction, float _distance, ref RaycastHit2D _hit)
+    public bool GetCollisor(Vector2 _direction, float _distance, ref RaycastHit2D _hit, bool _debug = false)
     {
-        Vector2 _startingPoint;
-        Vector2 _spreadDirection;
+        return GetCollisor(_direction, _distance, ref _hit, contactLayers, _debug);
+    }
 
-        float _padding = 0.003f;
-        Bounds _bounds = boxCollider2D.bounds;
-        _bounds.size -= new Vector3(_padding * 2, _padding * 2, 0f);
+    public Ray2D[] GetRays(Vector2 _direction)
+    {
+        Bounds bounds = GetBounds();
+        Ray2D[] rays = new Ray2D[rayCount];
+        Vector2 perpendicular = new Vector2(-_direction.y, -_direction.x);
+        Vector2 start = (_direction == Vector2.right || _direction == Vector2.up) ? bounds.max : bounds.min;
+        float size = (_direction == Vector2.right || _direction == Vector2.left) ? bounds.size.y : bounds.size.x;
+        float spaccing = size / (rayCount - 1);
 
-        float _size;
-        bool _collided = false;
-        float _minDistance = _distance + _padding;
-
-        // Setting the spread direction of the rays
-        _spreadDirection = new Vector2(-_direction.y, -_direction.x);   // Rotating the direction 90 degree counter-clockwise
-
-        // Setting the starting point
-        if (_direction == Vector2.right || _direction == Vector2.up)
-        {
-            _startingPoint = _bounds.max ;                  // Start on the upper right corner of the colider 
-        }
-        else
-        {
-            _startingPoint = _bounds.min;                  // Start on the lower left corner of the colider 
-        }
-
-        // Setting the size of the area covered by the rays
-        if (_direction == Vector2.right || _direction == Vector2.left)
-        {
-            _size = _bounds.size.y;                               // Horizontal rays spread across the height
-        }
-        else
-        {
-            _size = _bounds.size.x;                               // Vertical rays spread across the width
-        }
-
-        // Setting the spacing between the rays
-        float _spacing = _size / (rayCount - 1);
-
-        // Disabling the collider. It prevents the raycast from hitting itself
-        boxCollider2D.enabled = false;
-
-        // Creating the rays
         for (int i = 0; i < rayCount; i++)
         {
-            // Setting the start point of the ray based on the index
-            Vector2 _relativePosition = _startingPoint + _spreadDirection * i * _spacing;
+            Vector2 _origin = start + perpendicular * spaccing * i;
+            rays[i] = new Ray2D(_origin, _direction);
+        }
 
-            // Just for debug
-            Debug.DrawLine(_relativePosition, _relativePosition + _direction * (_distance + skinWidth + _padding), Color.white);
+        return rays;
+    }
 
-            // Checking for collision from the current ray
-            RaycastHit2D _aux = Physics2D.Raycast(_relativePosition, _direction, _distance + skinWidth + _padding, contactLayers);
+    public RaycastHit2D? MultiCast(Vector2 _direction, float _distance, LayerMask _layerMask)
+    {
+        float _minDistance = _distance;
+        RaycastHit2D? _closestHit = null;
 
-            if (_aux && !_aux.collider.gameObject.Equals(gameObject))
+        boxCollider2D.enabled = false;
+
+        foreach (var ray in GetRays(_direction))
+        {
+            RaycastHit2D _hit = Physics2D.Raycast(ray.origin, ray.direction, _minDistance + skinWidth, _layerMask);
+            Debug.DrawRay(ray.origin, ray.direction * (_hit.collider != null? _hit.distance : _minDistance), Color.yellow);
+
+            if (_hit.collider != null && _hit.distance <= _minDistance)
             {
-                bool _ignoreSemiCollision = _aux.collider.gameObject.layer == 11 && (_direction.y >= 0 || ignoreSemiCollision);
+                _minDistance = _hit.distance;
+                _closestHit = _hit;
 
-                if (!_ignoreSemiCollision && _aux.distance - skinWidth + _padding < _minDistance)
-                {
-                    _minDistance = _aux.distance - skinWidth + _padding;
-                    _hit = _aux;
-                    _collided = true;
-                }
+                if (_minDistance <= minDistance) break;
             }
         }
 
-        // Enabling the collider
         boxCollider2D.enabled = true;
 
-        return _collided;
+        return _closestHit;
+    }
+
+    public RaycastHit2D[] MultiCastAll(Vector2 _direction, float _distance, LayerMask _layerMask)
+    {
+        List<RaycastHit2D> hits = new List<RaycastHit2D>();
+
+        boxCollider2D.enabled = false;
+
+        foreach (var ray in GetRays(_direction))
+        {
+           foreach(var hit in Physics2D.RaycastAll(ray.origin, ray.direction, _distance + skinWidth, _layerMask))
+           {
+                hits.Add(hit);
+                hit.collider.enabled = false;
+            }
+        }
+
+        boxCollider2D.enabled = true;
+
+        hits.ForEach(hit => hit.collider.enabled = true);
+
+        return hits.ToArray();
+    }
+
+    public bool GetCollisor(Vector2 _direction, float _distance, ref RaycastHit2D _outHit, LayerMask _layerMask, bool _debug = false)
+    {
+        RaycastHit2D? _hit = MultiCast(_direction, _distance, _layerMask);
+        if (_hit != null) _outHit = _hit.Value;
+
+        return _hit != null;
+    }
+
+    public void StopAllForces()
+    {
+        velocity = Vector2.zero;
+        affectedByGravity = false;
+        StopAllCoroutines();
+    }
+
+    public Collider2D GetCollider()
+    {
+        return boxCollider2D;
+    }
+
+    public static float HeightToJumpForce(float _height)
+    {
+        return Mathf.Sqrt(_height * -Physics2D.gravity.y * 2);
+    }
+
+    public Collider2D[] CheckColliders(LayerMask _layerMask)
+    {
+        return Physics2D.OverlapBoxAll(transform.position, boxCollider2D.size, 0, _layerMask);
+    }
+
+    public List<T> CheckCollidersOfType<T>(LayerMask _layerMask)
+    {
+        List<T> list = new List<T>();
+
+        foreach (var collider in CheckColliders(_layerMask))
+        {
+            T colliderType = collider.GetComponent<T>();
+
+            if (colliderType != null)
+            {
+                list.Add(colliderType);
+            }
+        }
+
+        return list;
     }
 
     #endregion

@@ -10,7 +10,7 @@ public class RangedSpell : Spell
     public Projectile projectile;
     public bool checkForWall = false;
 
-    public override void Cast(PlayerBase _player, Vector2 _castPoint)
+    public override void Cast(BasePlayer _player, Vector2 _castPoint)
     {
         if (checkForWall)
         {
@@ -26,7 +26,7 @@ public class RangedSpell : Spell
         _projectile.direction = _player.Direction;
     }
 
-    public override bool CanCast(PlayerBase _player)
+    public override bool CanCast(BasePlayer _player)
     {
         bool _canCast = true;
 

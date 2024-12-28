@@ -1,0 +1,159 @@
+[33mcommit 30954e773896573501e023f0b3066fe942046886[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 6217955 174d6e6
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Fri Sep 11 00:15:12 2020 -0300
+
+    :art: Melhorias visuais menores
+
+[33mcommit 6217955bdcd5ca8422d9651be21f725ff39925b0[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Fri Sep 11 00:13:56 2020 -0300
+
+    :art: Melhorias visuais menores
+
+[33mcommit 174d6e6c9ed57985dcca9965945bca870d95f99a[m
+Author: Vinicius Assis <viniciusassis2012@gmail.com>
+Date:   Fri Sep 11 00:08:13 2020 -0300
+
+    Adicionado Post-Processing de iluminacao 2D
+
+[33mcommit 396bd244addf69550487b6593f69e5291dc89e24[m
+Author: Vinicius Assis <viniciusassis2012@gmail.com>
+Date:   Thu Sep 10 19:58:35 2020 -0300
+
+    Corrigindo Animacao do Rod
+
+[33mcommit 1fe802a4de05f6f05e5dc48c038130cc9c091630[m
+Merge: 13e6f43 ea71094
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 19:48:46 2020 -0300
+
+    Merge branch 'master' of https://github.com/WillianSentoSe/spell-order
+
+[33mcommit 13e6f4335a27776eedf04ec2cbf406d2277497df[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 19:48:38 2020 -0300
+
+    :sparkles: Adicionado componente de vibração
+
+[33mcommit ea71094843afc8b4e932b53edade1d702076ae36[m
+Author: Vinicius Assis <viniciusassis2012@gmail.com>
+Date:   Thu Sep 10 19:47:10 2020 -0300
+
+    Adicionado prefab Player
+
+[33mcommit 0c704caa1480ae8efbc6f0ca2f0436a1dff3ad13[m
+Merge: a3af180 ec8d016
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 19:35:44 2020 -0300
+
+    Merge branch 'master' of https://github.com/WillianSentoSe/spell-order
+
+[33mcommit a3af1809ac9e5d6f67e0f7da291ec1cf1a65d4ea[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 19:35:35 2020 -0300
+
+    :art: Melhorias visuais nos efeitos de fogo
+
+[33mcommit ec8d016a4baee5f3f160636037608f4067dbf560[m
+Author: Vinicius Assis <viniciusassis2012@gmail.com>
+Date:   Thu Sep 10 19:15:20 2020 -0300
+
+    Removendo package TextMeshPro
+
+[33mcommit 4b4d0f0d101dff210a623c05581b9f2008d10107[m
+Author: Vinicius Assis <viniciusassis2012@gmail.com>
+Date:   Thu Sep 10 19:05:09 2020 -0300
+
+    Adicionado indicador visual da spell ativa
+
+[33mcommit 37973be852eb10690b1a2d553750485ac9e17010[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 17:34:38 2020 -0300
+
+    :art: Melhorias visuais menores
+
+[33mcommit acd45660ab923fe038d60777245d273b41560c96[m
+Merge: c736a49 42699f2
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 17:32:04 2020 -0300
+
+    Merge branch 'master' of https://github.com/WillianSentoSe/spell-order
+
+[33mcommit c736a4918b4c3c981424f66dace05a00e4b42a81[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 17:31:09 2020 -0300
+
+    :sparkles: Melhorias visuais menores
+
+[33mcommit 0fb6cded3d3fe3f0de4f9522ddd355b9fd635846[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Thu Sep 10 01:37:06 2020 -0300
+
+    :sparks: Fire Rod adicionada
+
+[33mcommit 42699f2b0a812870aa263df28246c2ef77bad9b8[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 21:01:33 2020 -0300
+
+    Update README.md
+
+[33mcommit cb73fdad74c28138cc19fee0beb961fbb3584bfc[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 20:58:25 2020 -0300
+
+    Update README.md
+
+[33mcommit 4aebbcd12f83609706662a5ddc34331537cf5e98[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 20:58:07 2020 -0300
+
+    Update README.md
+
+[33mcommit 132417e084c25492c36cbcc723cb3c926b5df3b4[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 20:35:02 2020 -0300
+
+    Update README.md
+
+[33mcommit eccee6732c49a3ca0a970a5f1c733f8bf07c2d53[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 20:28:31 2020 -0300
+
+    Update README.md
+
+[33mcommit 57a74b79005e82392ac8bb7ab2dfc01e2e752047[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 20:25:37 2020 -0300
+
+    Update README.md
+
+[33mcommit ed7e7c892a6cc79e4ffc5af16e148a05321f17df[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 20:24:44 2020 -0300
+
+    Update README.md
+
+[33mcommit 18c464db718e3c22e406deeeeaaeca28365d52d4[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Wed Sep 9 20:18:31 2020 -0300
+
+    :art: Melhorias na Ice Rod
+
+[33mcommit 557d4c501ee0ce16c3146d96bbabeaa35b0739c9[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Wed Sep 9 18:32:51 2020 -0300
+
+    :sparkles: Ice Rod Adicionada
+
+[33mcommit 107143c4eab026e95c62e8db313eec883a8c39e1[m
+Author: WillianSentoSe <will.asse@outlook.com>
+Date:   Wed Sep 9 14:13:20 2020 -0300
+
+    Upload inicial
+
+[33mcommit 0f332e1d86b75cd8929b27e355267cada0835edc[m
+Author: WillianSentoSe <55331131+WillianSentoSe@users.noreply.github.com>
+Date:   Wed Sep 9 13:56:27 2020 -0300
+
+    Initial commit

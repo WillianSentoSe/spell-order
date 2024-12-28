@@ -97,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footDistance: 0
   contactPoint: {x: 0, y: 0}
-  groundOvertime: 0
+  groundOvertime: 0.12
   pushable: 0
   contactLayers:
     serializedVersion: 2
@@ -132,8 +132,8 @@ MonoBehaviour:
   state: 0
   moveSpeed: 4
   accelerationTime: 0.1
-  spriteRenderer: {fileID: 0}
-  jumpHeight: 1.2
+  spriteRenderer: {fileID: 2788414767008154085}
+  jumpHeight: 1.25
   smoothFallEnabled: 1
   maxSmoothFallVelocity: 1
   accelerationTimeOnAir: 0.15
@@ -145,6 +145,8 @@ MonoBehaviour:
   wallSlidingVelocity: 1
   canPushObjects: 0
   pushVelocityMultiplayer: 0.1
+  deathEffect: {fileID: 6586288442167579293, guid: 8c58fbd085e13ca4cad467f612c9d04c,
+    type: 3}
 --- !u!1 &2788414766971363642
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2788414766971363642}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalPosition: {x: 0.128, y: 0.167, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2788414767008154084}

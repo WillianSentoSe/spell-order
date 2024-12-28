@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 
-public class SidescrollerPlayer : PlayerBase
+public class SidescrollerPlayer : BasePlayer
 {
     #region Properties
 
@@ -26,7 +26,7 @@ public class SidescrollerPlayer : PlayerBase
     //public float Direction { get { return spriteRenderer.flipX ? -1 : 1; } }
 
     // Private Properties
-    private Vector2 input;
+    //private Vector2 input;
     private float jumpForce;
     private int jumpsLeft;
     private float jumpTimeLeft;
@@ -36,27 +36,37 @@ public class SidescrollerPlayer : PlayerBase
     private Coroutine waitingForGround;
 
     // References
-    public static SidescrollerActions actions;
+    protected SidescrollerPlayerInputController inputController;
+
+    public SidescrollerPlayerInputController InputController { get { return inputController; } }
 
     #endregion
 
+    protected override void Init()
+    {
+        base.Init();
+
+        inputController = new SidescrollerPlayerInputController(this);
+    }
+
     #region Execution
 
-    protected void OnEnable()
-    {
-        SetActions();
-    }
+    protected virtual void OnEnable() { }
 
     public override void Start()
     {
         base.Start();
 
-        jumpForce = Mathf.Sqrt(jumpHeight * -Physics2D.gravity.y * 2);
+        jumpForce = Body.HeightToJumpForce(jumpHeight);
         body.beforeMove += PushObjects;
+
+        InputController.Enabled = true;
     }
 
-    public virtual void Update()
+    public override void Update()
     {
+        base.Update();
+
         HandleSmoothFall();
         HandleJumpCount();
         HandleMovement();
@@ -66,66 +76,37 @@ public class SidescrollerPlayer : PlayerBase
 
     protected void OnDisable()
     {
-        DisableActions();
+        InputController.Enabled = false;
     } 
 
     #endregion
 
     #region Actions
 
-    protected void SetActions()
+    public void Jump()
     {
-        actions = new SidescrollerActions();
+          if (state != PlayerState.Enabled) { return; }
 
-        actions.Gameplay.Enable();
-
-        //actions.Gameplay.Move.started += OnMoveStart;
-        actions.Gameplay.Move.canceled += OnMoveStop;
-
-        actions.Gameplay.Move.performed += OnMovePerformed;
-
-        actions.Gameplay.Jump.performed += OnJumpPerformed;
-        actions.Gameplay.Jump.canceled += OnJumpCanceled;
-
-        actions.Gameplay.Down.started += OnDownStart;
-
-        actions.Gameplay.PrimaryItem.performed += OnPrimaryItemPerformed;
-
-        actions.Gameplay.Restart.performed += OnRestartPerformed;
-    }
-
-    protected void DisableActions()
-    {
-        actions.Gameplay.Disable();
-    }
-
-    //protected virtual void OnMoveStart(InputAction.CallbackContext _context)
-    //{
-    //    horizontalInput = _context.ReadValue<Vector2>().x;
-    //}
-
-    protected virtual void OnMovePerformed(InputAction.CallbackContext _context)
-    {
-        input = _context.ReadValue<Vector2>();
-    }
-
-    protected virtual void OnMoveStop(InputAction.CallbackContext _context)
-    {
-        input = Vector2.zero;
-    }
-
-    protected virtual void OnJumpPerformed(InputAction.CallbackContext _context)
-    {
-        if (state != PlayerState.Enabled)
-        {
-            return;
-        }
-
-        if (input.y > -0.75f)
+        if (InputController.LeftAxis.y > -0.75f)
         {
             if (jumpsLeft > 0)
             {
-                Jump();
+                float _horizontalSpeed = 0;
+
+                if (wallJumpEnabled && onWall)
+                {
+                    _horizontalSpeed = -Direction.x * moveSpeed * wallJumpForce;
+                    SetState(PlayerState.Disabled);
+                    SetState(PlayerState.Enabled, wallJumpTime);
+                    spriteRenderer.flipX = !spriteRenderer.flipX;
+                }
+
+                if (jumpsLeft > 0) jumpsLeft -= 1;
+
+                // Prevents the Player to jump multiple times after leaving the ground
+                body.GroundedOvertime = false;
+
+                body.Velocity = new Vector2(body.Velocity.x + _horizontalSpeed, jumpForce);
             }
             else
             {
@@ -139,31 +120,16 @@ public class SidescrollerPlayer : PlayerBase
         }
         else
         {
-            StartCoroutine(IgnoreSemiCollision(ignoreSemiCollisionTime));
+            StartCoroutine(IgnoreSemiCollision());
         }
     }
 
-    protected virtual void OnJumpCanceled(InputAction.CallbackContext _context)
+    public void CancelJump()
     {
         if (body.Velocity.y > 0 && !onWall)
         {
             body.Velocity = new Vector2(body.Velocity.x, body.Velocity.y * 0.5f);
         }
-    }
-
-    protected virtual void OnDownStart(InputAction.CallbackContext _context)
-    {
-        StartCoroutine(IgnoreSemiCollision(ignoreSemiCollisionTime));
-    }
-
-    protected virtual void OnPrimaryItemPerformed(InputAction.CallbackContext _context)
-    {
-
-    }
-
-    protected virtual void OnRestartPerformed(InputAction.CallbackContext _context)
-    {
-
     }
 
     #endregion
@@ -228,11 +194,11 @@ public class SidescrollerPlayer : PlayerBase
     {
         if (state == PlayerState.Enabled)
         {
-            Vector2 _targetVelocity = new Vector2(input.x * moveSpeed, body.Velocity.y);
+            Vector2 _targetVelocity = new Vector2(InputController.LeftAxis.x * moveSpeed, body.Velocity.y);
             float _accelerationTime = body.Grounded ? accelerationTime : accelerationTimeOnAir;
 
-            if (input.x != 0 && body.Grounded)
-                direction = new Vector2(input.x > 0? 1f : -1f, 0f);
+            if (InputController.LeftAxis.x != 0)
+                direction = new Vector2(InputController.LeftAxis.x > 0? 1f : -1f, 0f);
 
             body.Velocity = Vector2.SmoothDamp(body.Velocity, _targetVelocity, ref acceleration, _accelerationTime);
         }
@@ -240,7 +206,7 @@ public class SidescrollerPlayer : PlayerBase
 
     private void HandleWallJump()
     {
-        if (!wallJumpEnabled || input.x == 0 || state != PlayerState.Enabled)
+        if (!wallJumpEnabled || InputController.LeftAxis.x == 0 || state != PlayerState.Enabled)
         {
             onWall = false;
             return;
@@ -259,17 +225,18 @@ public class SidescrollerPlayer : PlayerBase
     {
         bool _grounded = body.Grounded;
 
+        if (playingAnimation || state == PlayerState.Dead)
+            return;
+
         if (state == PlayerState.Enabled)
         {
             spriteRenderer.flipX = Direction.x < 0;
         }
 
-        if (playingAnimation)
-            return;
 
         if (_grounded)
         {
-            if (Mathf.Abs(input.x) <= 0.05f)
+            if (Mathf.Abs(InputController.LeftAxis.x) <= 0.05f)
             {
                 animator.Play("Idle");
             }
@@ -302,29 +269,9 @@ public class SidescrollerPlayer : PlayerBase
         }
     }
 
-    private void Jump()
-    {
-        float _horizontalSpeed = 0;
-
-        if (wallJumpEnabled && onWall)
-        {
-            _horizontalSpeed = -Direction.x * moveSpeed * wallJumpForce;
-            SetState(PlayerState.Disabled);
-            SetState(PlayerState.Enabled, wallJumpTime);
-            spriteRenderer.flipX = !spriteRenderer.flipX;
-        }
-
-        if (jumpsLeft > 0) jumpsLeft -= 1;
-
-        // Prevents the Player to jump multiple times after leaving the ground
-        body.GroundedOvertime = false;
-
-        body.Velocity = new Vector2(body.Velocity.x + _horizontalSpeed, jumpForce);
-    }
-
     private void PushObjects(Vector2 _velocity)
     {
-        if (state != PlayerState.Enabled || _velocity.y != 0 || _velocity.x == 0 || canPushObjects == false || body.Grounded == false || input.x == 0)
+        if (state != PlayerState.Enabled || _velocity.y != 0 || _velocity.x == 0 || canPushObjects == false || body.Grounded == false || InputController.LeftAxis.x == 0)
         {
             return;
         }
@@ -373,11 +320,11 @@ public class SidescrollerPlayer : PlayerBase
         Jump();
     }
 
-    private IEnumerator IgnoreSemiCollision(float _duration)
+    public IEnumerator IgnoreSemiCollision()
     {
         body.ignoreSemiCollision = true;
 
-        yield return new WaitForSeconds(_duration);
+        yield return new WaitForSeconds(ignoreSemiCollisionTime);
 
         body.ignoreSemiCollision = false;
     }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd1b983a11504a041be439bcf5849174, type: 3}
   m_Name: Ice Rod
   m_EditorClassIdentifier: 
+  sprite: {fileID: -7393300400691556889, guid: e137c823ee6db554b916ff9c4df3a510, type: 3}
   rodSprite: {fileID: -916319267847001276, guid: 75c14bbf80de8a24c8aba6e3262bdd4a,
     type: 3}
   spellName: Ice Rod

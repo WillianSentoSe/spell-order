@@ -18,6 +18,8 @@ public class IceBlock : MonoBehaviour
     public float maxAirTime = 4f;
     public Animator animator;
     public GameObject startParticlePrefab;
+    public GameObject destroyEffect;
+    public LayerMask BreakWhenAbove;
 
     // Private properties
     private float airTime;
@@ -62,7 +64,10 @@ public class IceBlock : MonoBehaviour
                 if (shakeEffect.IsShaking) shakeEffect.Stop();
                 body.GravityMultiplier = gravityMultiplier;
             }
+
         }
+
+        CheckForCollisionBelow();
     }
 
     #endregion
@@ -71,6 +76,7 @@ public class IceBlock : MonoBehaviour
 
     public void DestroyBlock()
     {
+        if (destroyEffect) Instantiate(destroyEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
@@ -98,7 +104,29 @@ public class IceBlock : MonoBehaviour
         {
             DestroyBlock();
         }
-    } 
+    }
+
+    private void CheckForCollisionBelow()
+    {
+        if (body.Velocity.y >= 0) return;
+
+        float _distance = 0.003f;
+        RaycastHit2D _hit = new RaycastHit2D();
+
+        if (body.GetCollisor(Vector2.down, _distance, ref _hit, BreakWhenAbove, true))
+        {
+            Player _player = _hit.collider.GetComponent<Player>();
+
+            if (_player)
+            {
+                _player.Kill();
+            }
+            else
+            {
+                DestroyBlock();
+            }
+        }
+    }
 
     #endregion
 }
